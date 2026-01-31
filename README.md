@@ -1,163 +1,176 @@
+# Kendra – GPT-3.5 Turbo Voice Chatbot with Bing Search & DALL·E
 
+**A Python voice chatbot powered by OpenAI GPT-3.5-Turbo, Microsoft Bing Search, Amazon Polly text-to-speech, and DALL·E image generation.** Chat by typing, hear replies spoken aloud, search the web, and generate images—all from the terminal.
 
-# Kendra is a powerful chatbot charged by GPT-3.5-Turbo, Microsoft Bing Search, Amazon Polly, and OpenAI DALL·E .
+---
 
-This is a Python program that demonstrates how to use the OpenAI API to generate conversational AI responses, search the web using Bing Search API, and generate images using DALL·E. The program also uses Amazon Polly to generate spoken text from the conversational responses.
+## Table of Contents
+
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Commands & Capabilities](#commands--capabilities)
+- [Customization](#customization)
+- [Use Cases](#use-cases)
+- [Acknowledgments](#acknowledgments)
+
+---
+
+## Features
+
+| Feature | Description |
+|--------|-------------|
+| **Conversational AI** | Natural dialogue using OpenAI GPT-3.5-Turbo with conversation memory |
+| **Voice output** | Replies spoken aloud via Amazon Polly (text-to-speech) |
+| **Web search** | Bing Search API integration—search the web from the chat |
+| **Image generation** | Create images with DALL·E from text descriptions; saved to your desktop |
+| **Persistent history** | Conversation is saved when you quit properly and restored on next run |
+
+---
+
+## Quick Start
+
+```bash
+# 1. Clone and enter the project
+git clone https://github.com/YOUR_USERNAME/Chatbot-GPT-3.5-turbo.git
+cd Chatbot-GPT-3.5-turbo
+
+# 2. Install dependencies
+pip install openai boto3 pygame requests
+
+# 3. Add your API keys in KendraGenVIbot.py (see Configuration)
+# 4. Run the chatbot
+python KendraGenVIbot.py
+```
+
+Type **quit** when done so your conversation is saved.
+
+---
 
 ## Prerequisites
 
-To run this program, you need to have the following:
-- Python 3.8 (minimum) https://www.python.org/downloads/release/python-380/
-- An OpenAI API key
-- A Bing Search API key
-- An endpoint for the Bing Search API
-- Amazon AWS credentials with access to the Amazon Polly service
+- **Python 3.8+** — [Download Python](https://www.python.org/downloads/)
+- **OpenAI API key** — for GPT-3.5-Turbo and DALL·E
+- **Bing Search API** — subscription key and endpoint (Azure)
+- **AWS account** — for Amazon Polly (region, access key, secret key)
 
-You also need to have the following Python packages installed:
+---
 
-- `openai`
-- `boto3`
-- `pygame`
-- `requests`
+## Installation
 
-You can install these packages using `pip`:
+Install required packages:
 
-```
+```bash
 pip install openai boto3 pygame requests
 ```
 
-## Setting up APIs, and Reigions
+| Package | Purpose |
+|---------|--------|
+| `openai` | GPT-3.5-Turbo chat and DALL·E image generation |
+| `boto3` | Amazon Polly text-to-speech |
+| `pygame` | Audio playback for Polly output |
+| `requests` | Bing Search API and image download |
 
-## OpenAI API
+---
 
-1. Go to the [OpenAI API](https://beta.openai.com/signup/) and sign up for an account.
-2. Once you have an account, go to your [dashboard](https://beta.openai.com/dashboard/) and create an API key.
-3. Copy the API key and replace `YOUR_OPENAI_API_KEY` in the code with your API key.
+## Configuration
 
-## Bing Search API
+Edit `KendraGenVIbot.py` and set your credentials.
 
-1. Go to the [Bing Search API documentation](https://docs.microsoft.com/en-us/bing/search-apis/bing-web-search/create-bing-search-service-resource) and follow the instructions to create a Bing Search resource.
-2. Once you have a resource, go to the [Azure portal](https://portal.azure.com/) and navigate to your resource's dashboard.
-3. Copy the subscription key and replace `YOUR_BING_SEARCH_API_KEY` in the code with your subscription key.
-4. Also, replace `BING SEARCH ENDPOINT` with the endpoint of your Bing Search resource.
+### OpenAI (GPT-3.5-Turbo & DALL·E)
 
-## Amazon Polly
+1. Sign up at [OpenAI](https://platform.openai.com/signup).
+2. Create an API key in the [OpenAI dashboard](https://platform.openai.com/api-keys).
+3. Replace `YOUR_OPENAI_API_KEY` with your key.
 
-1. Go to the [Amazon Web Services (AWS) console](https://console.aws.amazon.com/console/home) and sign up for an account if you don't already have one.
-2. Once you're signed in, navigate to the [IAM dashboard](https://console.aws.amazon.com/iam/home#/home) and create a new user with programmatic access.
-3. Copy the user's access key ID and secret access key, and replace `YOUR_AWS_ID_API_KEY` and `YOUR_AWS_SECRET_KEY` in the code with these values.
-4. Also, replace `YOUR_REGION_NAME` with the region where you created the user.
+### Bing Search API
+
+1. Create a Bing Search resource in [Azure](https://portal.azure.com/) — see [Bing Search API docs](https://learn.microsoft.com/en-us/bing/search-apis/bing-web-search/create-bing-search-service-resource).
+2. Replace `YOUR_BING_SEARCH_API_KEY` with your subscription key.
+3. Replace `BING SEARCH ENDPOINT` with your Bing endpoint URL.
+
+### Amazon Polly (Voice)
+
+1. Log in to [AWS Console](https://console.aws.amazon.com/).
+2. Create an IAM user with programmatic access and Polly permissions ([IAM](https://console.aws.amazon.com/iam/)).
+3. Replace `YOUR_AWS_ID_API_KEY` and `YOUR_AWS_SECRET_KEY`.
+4. Set `YOUR_REGION_NAME` (e.g. `us-east-1`).
+
+---
 
 ## Usage
 
-To use this program, run the `KendraGenVIbot.py` script in a Python environment that has the required packages and credentials set up. The program will prompt you for input and respond with conversational AI messages. You can exit the program by typing "quit" in the prompt. 
+Run the chatbot:
 
-## (THE BOT WILL NOT SAVE THE CONVERSATION HISTORY UNLESS YOU QUIT THE BOT PROPERLY.)
-
-## Adjusting the Settings in generate_chat_response function:
-
-The `generate_chat_response` function is responsible for generating the chat response. This function takes in the `conversation` parameter, which contains a list of messages between the user and the bot. Here's how you can adjust the settings in this part of the code:
-
-1. Truncate or Omit Conversation History: You can adjust the conversation history by changing the number of messages that the function will keep in memory. By default, it keeps the last 15 messages. If you want to increase or decrease this number, you can change the value in the following line of code:
-
-```
-conversation = conversation[-15:]
+```bash
+python KendraGenVIbot.py
 ```
 
-2. Limit Conversation Tokens: The `conversation_tokens` variable is used to count the number of tokens in the conversation. If this number exceeds 4096 tokens, the function will only keep the last message. If you want to adjust this value, you can change the number 4096 in the following line of code:
+- Type your message and press Enter.
+- Kendra replies in text and speaks the response (Polly).
+- Type **quit** to exit and **save** the conversation.
 
-```
-if conversation_tokens > 4096:
-    conversation = conversation[-1:]
-```
+> **Important:** Conversation history is only saved when you exit with **quit**. Exiting with Ctrl+C or closing the terminal will not save.
 
-3. Max Tokens: The `max_tokens` parameter limits the total number of tokens in the generated response. By default, this value is set to 1000 tokens. If you want to adjust this value, you can change the number in the following line of code:
+---
 
-```
-max_tokens=1000
-```
+## Commands & Capabilities
 
+### Chat
 
-### Search
+- Type any question or message for a GPT-3.5-Turbo reply.
+- Replies are shown in the terminal and read aloud.
 
-If you type "search" followed by a query, the program will use the Bing Search API to search the web for the query and return the top five search results.
+### Web search
 
-To adjust the number of searches in the `search_bing` function, you can modify the value of the `count` parameter in the `params` dictionary. The `count` parameter specifies the number of search results to retrieve from the Bing search API. By default, the value is set to 5, but you can change it to any positive integer value to retrieve more or fewer search results.
+- Include the word **search** in your message (e.g. `search latest Python news`).
+- The bot uses Bing to return search results and reads them.
 
-Here's an example of how to modify the `count` parameter to retrieve 10 search results:
+### Image generation
 
-```
-params = {
-    'q': query,
-    'count': 10,  # Retrieve 10 search results
-    'offset': 0,
-    'mkt': 'en-US'
-}
-```
+1. Type **generate image**.
+2. When asked, describe the image you want.
+3. DALL·E generates it and saves it to your **Desktop** as a `.jpg` file.
 
-**Note:** that the maximum value of `count` is 50, as per the Bing search API documentation.
+---
 
-### Image Generation
+## Customization
 
-If you type "generate image", the program will ask you to describe the image you want to see. You can then describe the image in natural language and the program will use DALL·E to generate an image based on your description. The program will save the generated image to your desktop.
+### Chat response (token and history limits)
 
+In `generate_chat_response`:
 
-## How to change the voice in Amazon Polly
+- **Number of messages kept:** change `conversation[-15:]` (default: last 15).
+- **Token limit:** change `4096` to adjust when history is trimmed.
+- **Max response length:** change `max_tokens=1000` in the API call.
 
-To change the voice used by the `speak_text` function in the Python code that uses Amazon Polly. By default, the voice used is "Joey". Follow the steps below to change the voice to a different one.
+### Search result count
 
-1. Determine the name of the voice you want to use. You can find a list of all the available voices at [this page](https://docs.aws.amazon.com/polly/latest/dg/voicelist.html). Note down the name of the voice you want to use.
+In `search_bing`, change the `count` in `params` (default: 5; max 50 per Bing API).
 
-2. In your code, find the `speak_text` function, which should look like this:
+### Amazon Polly voice
 
-   ```
-   def speak_text(text):
-        response = polly.synthesize_speech(
-            Text=text,
-            OutputFormat="mp3",
-            VoiceId="Joey",
-            Engine="neural"
-        )
-   ```
+1. Pick a voice from the [Polly voice list](https://docs.aws.amazon.com/polly/latest/dg/voicelist.html).
+2. In `speak_text`, change `VoiceId="Joey"` to your chosen voice (e.g. `"Emma"`).
 
-   The `VoiceId` parameter specifies the voice to use. By default, it is set to "Joey". To change the voice, update the `VoiceId` parameter with the name of the voice you want to use.
+Not all voices support the neural engine; if you get an error, try another voice or region. See [Polly regions](https://docs.aws.amazon.com/general/latest/gr/rande.html#polly_region).
 
-   For example, to use the "Emma" voice, the `speak_text` function should look like this:
-
-   ```
-   def speak_text(text):
-        response = polly.synthesize_speech(
-            Text=text,
-            OutputFormat="mp3",
-            VoiceId="Emma",
-            Engine="neural"
-        )
-   ```
-
-3. Save your changes and run your code. The `speak_text` function will now use the new voice you specified.
-
-   **Note:** that not all voices are available in all regions. If you get an error when trying to use a voice, you may need to switch to a different region that supports that voice. You can find a list of the available regions for Amazon Polly at [this page](https://docs.aws.amazon.com/general/latest/gr/rande.html#polly_region).
-   
-   **Note:** Not all Amazon Polly voices support the neural TTS engine. If you want to use the neural TTS engine, make sure to choose a voice that supports it. You can check the documentation to see which voices support the neural TTS engine. If you choose a voice that doesn't support the neural TTS engine, you can still use the standard TTS engine by removing the `Engine` parameter from the `synthesize_speech` function.
+---
 
 ## Use Cases
 
-This script can be used as a starting point for building a conversational AI chatbot or an interactive agent that responds to user input in a natural language. Some possible use cases for the script could be:
+- **Customer support** — 24/7 conversational support with search and voice.
+- **Personal assistant** — Quick answers, web search, and image creation.
+- **Education** — Interactive Q&A and explanations with voice.
+- **Research** — Fast web search and summarization.
+- **Accessibility** — Spoken replies for users who prefer or need audio.
+- **Prototyping** — Base for building custom voice or multimodal bots.
 
-1. Customer support: The chatbot could be trained on a knowledge base and used to provide 24/7 customer support for a product or service.
-
-2. Personal assistant: The chatbot could be integrated with a calendar or email system to help manage tasks, appointments, and reminders.
-
-3. Education: The chatbot could be used to help students learn a new language or a complex topic by providing personalized feedback and guidance.
-
-4. Entertainment: The chatbot could be designed to entertain users by telling jokes, playing games, or recommending movies or music.
-
-5. Research: The chatbot could be used to help researchers or academics find relevant literature or data by searching through online databases.
-
-6. Virtual tour guide: The chatbot could be used to provide users with a personalized tour of a city, museum, or historical site.
-
-7. Mental health support: The chatbot could be designed to provide emotional support or counseling to users who may be experiencing anxiety or stress.
+---
 
 ## Acknowledgments
 
-This program was created by adapting the OpenAI GPT-3.5 Turbo LLM and integrating it with the Bing Search API, DALL·E, and Amazon Polly.
+Kendra was built by combining **OpenAI GPT-3.5-Turbo** with **Microsoft Bing Search API**, **OpenAI DALL·E**, and **Amazon Polly** for a single voice-enabled chatbot experience.
